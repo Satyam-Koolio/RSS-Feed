@@ -7,13 +7,13 @@ function App() {
   const [description, setDescription] = useState("");
   const [episodes, setEpisodes] = useState([]);
 
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
+
   const handleUpload = async () => {
     const formData = new FormData();
     formData.append("audio", file);
     formData.append("title", title);
     formData.append("description", description);
-
-    const BASE_URL = process.env.REACT_APP_BASE_URL;
 
     const res = await axios.post(`${BASE_URL}/upload`, formData);
     if (res.data.success) {
@@ -51,7 +51,7 @@ function App() {
         ))}
       </ul>
 
-      <a href='http://localhost:5000/rss.xml' target='_blank' rel='noreferrer'>
+      <a href={`${BASE_URL}/rss.xml`} target='_blank' rel='noreferrer'>
         View RSS Feed
       </a>
     </div>
