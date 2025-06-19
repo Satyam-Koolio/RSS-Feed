@@ -5,7 +5,10 @@ const path = require("path");
 const fs = require("fs");
 
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
+
+// ✅ Use environment variable for deployed BASE_URL or fallback to localhost
+const BASE_URL = process.env.BASE_URL || `http://localhost:${PORT}`;
 
 app.use(cors());
 app.use(express.json());
@@ -21,7 +24,7 @@ app.post("/upload", upload.single("audio"), (req, res) => {
   const { title, description } = req.body;
   if (!req.file) return res.status(400).json({ error: "No file uploaded" });
 
-  const fileUrl = `http://localhost:${PORT}/uploads/${req.file.filename}`;
+  const fileUrl = `${BASE_URL}/uploads/${req.file.filename}`;
   const episodeData = {
     title,
     description,
@@ -61,7 +64,7 @@ app.get("/rss.xml", (req, res) => {
        xmlns:media="http://search.yahoo.com/mrss/">
     <channel>
       <title>My Podcast</title>
-      <link>http://localhost:${PORT}</link>
+      <link>${BASE_URL}</link>
       <language>en-us</language>
       <description>A sample podcast feed</description>
       <itunes:author>Your Name</itunes:author>
@@ -70,7 +73,7 @@ app.get("/rss.xml", (req, res) => {
         <itunes:name>Your Name</itunes:name>
         <itunes:email>your@email.com</itunes:email>
       </itunes:owner>
-      <itunes:image href="http://localhost:${PORT}/uploads/podcast-cover.jpg"/>
+      <itunes:image href="${BASE_URL}/uploads/podcast-cover.jpg"/>
       <itunes:explicit>no</itunes:explicit>
       <itunes:category text="Technology">
         <itunes:category text="Software"/>
@@ -85,5 +88,5 @@ app.get("/rss.xml", (req, res) => {
 
 // Start Server
 app.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
+  console.log(`Server running at ${BASE_URL}`);
 });
