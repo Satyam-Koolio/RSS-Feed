@@ -43,7 +43,35 @@ app.post("/upload", upload.single("audio"), (req, res) => {
 });
 
 // Serve uploaded files statically
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.get("/uploads/:filename", (req, res) => {
+  const filePath = path.join(__dirname, "uploads", req.params.filename);
+
+  fs.stat(filePath, (err, stats) => {
+    if (err || !stats.isFile()) return res.sendStatus(404);
+
+    const range = req.headers.range;
+    if (!range) {
+      res.writeHead(200, {
+        "Content-Length": stats.size,
+        "Content-Type": "audio/mpeg",
+      });
+      fs.createReadStream(filePath).pipe(res);
+    } else {
+      const [startStr, endStr] = range.replace(/bytes=/, "").split("-");
+      const start = parseInt(startStr, 10);
+      const end = endStr ? parseInt(endStr, 10) : stats.size - 1;
+
+      res.writeHead(206, {
+        "Content-Range": `bytes ${start}-${end}/${stats.size}`,
+        "Accept-Ranges": "bytes",
+        "Content-Length": end - start + 1,
+        "Content-Type": "audio/mpeg",
+      });
+
+      fs.createReadStream(filePath, { start, end }).pipe(res);
+    }
+  });
+});
 
 // RSS Feed Endpoint (Apple/Spotify compatible)
 app.get("/rss.xml", (req, res) => {
@@ -74,9 +102,9 @@ app.get("/rss.xml", (req, res) => {
       <title>My Podcast</title>
       <link>${BASE_URL}</link>
       <language>en-us</language>
-      <description>A sample podcast feed</description>
+      <description>A podcast where I explore the world of software, technology, and creative tools in depth every week.</description>
       <itunes:author>Your Name</itunes:author>
-      <itunes:summary>This is my podcast where I share amazing things.</itunes:summary>
+      <itunes:summary>Join me every week as I dive into the latest in software development, creative tools, and behind-the-scenes stories from tech creators.</itunes:summary>
       <itunes:owner>
         <itunes:name>Your Name</itunes:name>
         <itunes:email>your@email.com</itunes:email>
