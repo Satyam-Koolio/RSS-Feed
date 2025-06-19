@@ -84,7 +84,7 @@ app.get("/rss.xml", (req, res) => {
         <enclosure url="${ep.fileUrl}" type="audio/mpeg" />
         <guid>${ep.fileUrl}</guid>
         <pubDate>${ep.pubDate}</pubDate>
-        <itunes:author>Your Name</itunes:author>
+        <itunes:author>Satyam</itunes:author>
         <itunes:explicit>no</itunes:explicit>
         <itunes:duration>00:02:00</itunes:duration> <!-- optional placeholder -->
       </item>`
@@ -103,11 +103,11 @@ app.get("/rss.xml", (req, res) => {
       <link>${BASE_URL}</link>
       <language>en-us</language>
       <description>A podcast where I explore the world of software, technology, and creative tools in depth every week.</description>
-      <itunes:author>Your Name</itunes:author>
+      <itunes:author>Satyam</itunes:author>
       <itunes:summary>Join me every week as I dive into the latest in software development, creative tools, and behind-the-scenes stories from tech creators.</itunes:summary>
       <itunes:owner>
-        <itunes:name>Your Name</itunes:name>
-        <itunes:email>your@email.com</itunes:email>
+        <itunes:name>Satyam</itunes:name>
+        <itunes:email>satyamjsr999@gmail.com</itunes:email>
       </itunes:owner>
       <itunes:image href="${BASE_URL}/uploads/podcast-cover.jpg"/>
       <itunes:explicit>no</itunes:explicit>
