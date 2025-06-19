@@ -24,7 +24,12 @@ app.post("/upload", upload.single("audio"), (req, res) => {
   const { title, description } = req.body;
   if (!req.file) return res.status(400).json({ error: "No file uploaded" });
 
-  const fileUrl = `${BASE_URL}/uploads/${req.file.filename}`;
+  const ext = path.extname(req.file.originalname);
+  const newFilename = `${req.file.filename}${ext}`;
+  const newPath = path.join("uploads", newFilename);
+  fs.renameSync(req.file.path, newPath);
+
+  const fileUrl = `${BASE_URL}/uploads/${newFilename}`;
   const episodeData = {
     title,
     description,
@@ -59,10 +64,13 @@ app.get("/rss.xml", (req, res) => {
     .join("");
 
   const rssFeed = `<?xml version="1.0" encoding="UTF-8"?>
-  <rss version="2.0"
-       xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd"
-       xmlns:media="http://search.yahoo.com/mrss/">
+ <rss version="2.0"
+     xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd"
+     xmlns:media="http://search.yahoo.com/mrss/"
+     xmlns:podcast="https://podcastindex.org/namespace/1.0"
+     xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
+    <atom:link href="https://rss-feed-production-109c.up.railway.app/rss.xml" rel="self" type="application/rss+xml" />
       <title>My Podcast</title>
       <link>${BASE_URL}</link>
       <language>en-us</language>
