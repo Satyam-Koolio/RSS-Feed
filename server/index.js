@@ -37,28 +37,44 @@ app.post("/upload", upload.single("audio"), (req, res) => {
 // Serve uploaded files statically
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-// RSS Feed Endpoint
+// RSS Feed Endpoint (Apple/Spotify compatible)
 app.get("/rss.xml", (req, res) => {
   const rssItems = episodes
     .map(
       (ep) => `
-    <item>
-      <title>${ep.title}</title>
-      <description>${ep.description}</description>
-      <enclosure url="${ep.fileUrl}" type="audio/mpeg" />
-      <guid>${ep.fileUrl}</guid>
-      <pubDate>${ep.pubDate}</pubDate>
-    </item>`
+      <item>
+        <title>${ep.title}</title>
+        <description>${ep.description}</description>
+        <enclosure url="${ep.fileUrl}" type="audio/mpeg" />
+        <guid>${ep.fileUrl}</guid>
+        <pubDate>${ep.pubDate}</pubDate>
+        <itunes:author>Your Name</itunes:author>
+        <itunes:explicit>no</itunes:explicit>
+        <itunes:duration>00:02:00</itunes:duration> <!-- optional placeholder -->
+      </item>`
     )
     .join("");
 
-  const rssFeed = `
-  <rss version="2.0">
+  const rssFeed = `<?xml version="1.0" encoding="UTF-8"?>
+  <rss version="2.0"
+       xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd"
+       xmlns:media="http://search.yahoo.com/mrss/">
     <channel>
       <title>My Podcast</title>
       <link>http://localhost:${PORT}</link>
-      <description>A sample podcast feed</description>
       <language>en-us</language>
+      <description>A sample podcast feed</description>
+      <itunes:author>Your Name</itunes:author>
+      <itunes:summary>This is my podcast where I share amazing things.</itunes:summary>
+      <itunes:owner>
+        <itunes:name>Your Name</itunes:name>
+        <itunes:email>your@email.com</itunes:email>
+      </itunes:owner>
+      <itunes:image href="http://localhost:${PORT}/uploads/podcast-cover.jpg"/>
+      <itunes:explicit>no</itunes:explicit>
+      <itunes:category text="Technology">
+        <itunes:category text="Software"/>
+      </itunes:category>
       ${rssItems}
     </channel>
   </rss>`;
