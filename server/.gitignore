@@ -1,0 +1,27 @@
+# Node modules
+node_modules/
+
+# Environment variables
+.env
+
+# Uploaded audio files
+uploads/
+
+# Log files
+*.log
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Optional cache directories
+.cache/
+.nyc_output/
+coverage/
+
+# IDE/Editor folders
+.vscode/
+.idea/
+
+# npm debug log
+npm-debug.log*
