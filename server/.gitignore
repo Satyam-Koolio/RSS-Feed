@@ -4,8 +4,8 @@ node_modules/
 # Environment variables
 .env
 
-# Uploaded audio files
-uploads/
+# # Uploaded audio files
+# uploads/
 
 # Log files
 *.log
