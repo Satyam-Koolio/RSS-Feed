@@ -13,7 +13,9 @@ function App() {
     formData.append("title", title);
     formData.append("description", description);
 
-    const res = await axios.post("http://localhost:5000/upload", formData);
+    const BASE_URL = process.env.REACT_APP_BASE_URL;
+
+    const res = await axios.post(`${BASE_URL}/upload`, formData);
     if (res.data.success) {
       setEpisodes([...episodes, { title, description }]);
       setFile(null);
