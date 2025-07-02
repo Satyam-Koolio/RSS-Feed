@@ -107,7 +107,7 @@ app.get("/rss.xml", (req, res) => {
       <itunes:summary>Join me every week as I dive into the latest in software development, creative tools, and behind-the-scenes stories from tech creators.</itunes:summary>
       <itunes:owner>
         <itunes:name>Satyam</itunes:name>
-        <itunes:email>satyamjsr999@gmail.com</itunes:email>
+        <itunes:email>dhanush@koolio.ai</itunes:email>
       </itunes:owner>
       <itunes:image href="${BASE_URL}/uploads/podcast-cover.jpg"/>
       <itunes:explicit>no</itunes:explicit>
